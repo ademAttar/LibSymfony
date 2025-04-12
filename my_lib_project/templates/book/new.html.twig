@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Book{% endblock %}
+
+{% block body %}
+    <div class="vintage-container py-4">
+        <div class="vintage-header text-center mb-5">
+            <h1 class="vintage-title">
+                <span class="vintage-icon"><i class="fas fa-book-medical mr-2"></i></span>
+                <span class="vintage-text">Add New Volume</span>
+            </h1>
+            <div class="vintage-divider">
+                <span class="divider-line"></span>
+                <span class="divider-icon"><i class="fas fa-feather-alt"></i></span>
+                <span class="divider-line"></span>
+            </div>
+            <p class="vintage-subtitle">Record a new treasure for the collection</p>
+        </div>
+
+        <div class="vintage-form-container">
+            <div class="vintage-parchment">
+                {{ include('book/_form.html.twig', {
+                    'button_label': 'Add to Collection',
+                    'attr': {'class': 'vintage-form'}
+                }) }}
+            </div>
+        </div>
+
+        <div class="vintage-actions mt-5 text-center">
+            <a href="{{ path('app_book_index') }}" class="vintage-btn vintage-btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i> Return to Catalog
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Extended vintage styles for creation page */
+        .vintage-form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .vintage-parchment {
+            background: white;
+            border: 1px solid var(--vintage-secondary);
+            padding: 40px;
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+            box-shadow: 5px 5px 15px rgba(139, 69, 19, 0.1);
+            position: relative;
+        }
+
+        .vintage-parchment:before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px dashed var(--vintage-secondary);
+            pointer-events: none;
+        }
+
+        .vintage-form .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .vintage-form label {
+            font-family: 'Cinzel', serif;
+            color: var(--vintage-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.7rem;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .vintage-form .form-control {
+            background-color: var(--vintage-paper);
+            border: 1px solid var(--vintage-secondary);
+            border-radius: 0;
+            padding: 12px 15px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--vintage-text);
+            transition: all 0.3s ease;
+        }
+
+        .vintage-form .form-control:focus {
+            border-color: var(--vintage-primary);
+            box-shadow: 0 0 0 0.2rem rgba(139, 69, 19, 0.25);
+            background-color: rgba(255, 248, 225, 0.5);
+        }
+
+        .vintage-form .btn-primary {
+            background-color: var(--vintage-primary);
+            border-color: var(--vintage-dark);
+            color: white;
+            padding: 12px 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .vintage-form .btn-primary:hover {
+            background-color: var(--vintage-accent);
+            border-color: var(--vintage-dark);
+            transform: translateY(-2px);
+        }
+
+        .vintage-actions {
+            border-top: 1px dashed var(--vintage-secondary);
+            padding-top: 30px;
+            margin-top: 40px;
+        }
+
+        /* Special styling for file upload to match vintage theme */
+        .custom-file-label {
+            background-color: var(--vintage-paper);
+            border: 1px solid var(--vintage-secondary);
+            border-radius: 0;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--vintage-text);
+        }
+
+        .custom-file-label::after {
+            background-color: var(--vintage-secondary);
+            color: var(--vintage-text);
+            border-left: 1px solid var(--vintage-secondary);
+            border-radius: 0;
+            font-family: 'Cormorant Garamond', serif;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Enhance form with vintage interactions
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('label').style.color = 'var(--vintage-accent)';
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('label').style.color = 'var(--vintage-primary)';
+            });
+        });
+
+        // Special handling for file upload to show selected filename
+        document.querySelector('.custom-file-input')?.addEventListener('change', function() {
+            let fileName = this.files[0]?.name || 'Select book cover image';
+            let label = this.nextElementSibling;
+            label.innerHTML = fileName;
+            label.style.color = 'var(--vintage-accent)';
+        });
+    </script>
+{% endblock %}

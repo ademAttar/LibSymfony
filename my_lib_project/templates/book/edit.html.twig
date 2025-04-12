@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Book{% endblock %}
+
+{% block body %}
+    <div class="vintage-container py-4">
+        <div class="vintage-header text-center mb-5">
+            <h1 class="vintage-title">
+                <span class="vintage-icon"><i class="fas fa-pen-nib mr-2"></i></span>
+                <span class="vintage-text">Edit Volume</span>
+            </h1>
+            <div class="vintage-divider">
+                <span class="divider-line"></span>
+                <span class="divider-icon"><i class="fas fa-feather-alt"></i></span>
+                <span class="divider-line"></span>
+            </div>
+            <p class="vintage-subtitle">Revise this treasured tome</p>
+        </div>
+
+        <div class="vintage-edit-card">
+            <div class="vintage-card-body">
+                {{ include('book/_form.html.twig', {
+                    'button_label': 'Update Volume',
+                    'attr': {'class': 'vintage-form'}
+                }) }}
+            </div>
+        </div>
+
+        <div class="vintage-actions mt-4">
+            <a href="{{ path('app_book_index') }}" class="vintage-btn vintage-btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i> Return to Catalog
+            </a>
+
+            <div class="vintage-delete-form mt-3">
+                {{ include('book/_delete_form.html.twig', {
+                    'button_class': 'vintage-btn vintage-btn-danger'
+                }) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Extending the vintage styles */
+        .vintage-edit-card {
+            background: white;
+            border: 1px solid var(--vintage-secondary);
+            border-radius: 0;
+            box-shadow: 3px 3px 0px rgba(139, 69, 19, 0.2);
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .vintage-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .vintage-form label {
+            font-family: 'Cinzel', serif;
+            color: var(--vintage-primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .vintage-form .form-control {
+            background-color: var(--vintage-paper);
+            border: 1px solid var(--vintage-secondary);
+            border-radius: 0;
+            padding: 10px 15px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--vintage-text);
+        }
+
+        .vintage-form .form-control:focus {
+            border-color: var(--vintage-primary);
+            box-shadow: 0 0 0 0.2rem rgba(139, 69, 19, 0.25);
+        }
+
+        .vintage-form .btn-primary {
+            background-color: var(--vintage-primary);
+            border-color: var(--vintage-dark);
+            color: white;
+            padding: 10px 25px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+
+        .vintage-form .btn-primary:hover {
+            background-color: var(--vintage-accent);
+            border-color: var(--vintage-dark);
+        }
+
+        .vintage-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .vintage-btn-secondary {
+            background-color: var(--vintage-secondary);
+            border-color: var(--vintage-primary);
+            color: var(--vintage-text);
+        }
+
+        .vintage-btn-secondary:hover {
+            background-color: var(--vintage-accent);
+            color: white;
+        }
+
+        .vintage-btn-danger {
+            background-color: #8B0000;
+            border-color: #600000;
+            color: white;
+        }
+
+        .vintage-btn-danger:hover {
+            background-color: #A52A2A;
+            color: white;
+        }
+
+        .vintage-delete-form {
+            border-top: 1px dashed var(--vintage-secondary);
+            padding-top: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+    </style>
+{% endblock %}

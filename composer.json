@@ -1,0 +1,9 @@
+{
+    "require": {
+        "symfony/orm-pack": "^2.4",
+        "symfony/doctrine-messenger": "^7.2",
+        "doctrine/doctrine-migrations-bundle": "^3.4",
+        "symfony/property-info": "*",
+        "phpstan/phpdoc-parser": "*"
+    }
+}
