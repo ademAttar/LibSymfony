@@ -3,12 +3,32 @@
 {% block title %}Book Details{% endblock %}
 
 {% block body %}
-    <div class="container my-4">
-        <h1 class="text-center mb-4">Book Details</h1>
+    <div class="vintage-container py-4">
+        {% if app.session.get('user') %}
+            <div class="vintage-welcome text-center mb-4">
+                <span class="welcome-text">Welcome, {{ app.session.get('user').firstName }}!</span>
+                <a href="{{ path('app_logout') }}" class="vintage-btn vintage-btn-outline ml-2">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Log Out
+                </a>
+            </div>
+        {% endif %}
 
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <table class="table table-bordered table-striped">
+        <div class="vintage-header text-center mb-5">
+            <h1 class="vintage-title">
+                <span class="vintage-icon"><i class="fas fa-book-open mr-2"></i></span>
+                <span class="vintage-text">Book Details</span>
+            </h1>
+            <div class="vintage-divider">
+                <span class="divider-line"></span>
+                <span class="divider-icon"><i class="fas fa-feather-alt"></i></span>
+                <span class="divider-line"></span>
+            </div>
+            <p class="vintage-subtitle">Examine this literary treasure</p>
+        </div>
+
+        <div class="vintage-table-container">
+            <div class="vintage-table-card">
+                <table class="vintage-table">
                     <tbody>
                     <tr>
                         <th>Id</th>
@@ -34,19 +54,288 @@
                         <th>Image</th>
                         <td>
                             {% if book.image %}
-                                <img src="{{ book.image }}" alt="{{ book.title }}" class="img-fluid" style="max-width: 150px;">
+                                <img src="{{ book.image }}" alt="{{ book.title }}" class="vintage-table-image">
                             {% else %}
-                                <span>No image available</span>
+                                <span class="vintage-no-image">No image available</span>
                             {% endif %}
                         </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ path('app_book_index2') }}" class="btn btn-secondary">Back to List</a>
+                <div class="vintage-table-footer">
+                    <a href="{{ path('app_book_index2') }}" class="vintage-btn vintage-btn-outline">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to List
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --vintage-primary: #8B4513;
+            --vintage-secondary: #D2B48C;
+            --vintage-accent: #A0522D;
+            --vintage-light: #F5F5DC;
+            --vintage-dark: #5D4037;
+            --vintage-text: #3E2723;
+            --vintage-paper: #FFF8E1;
+        }
+
+        body {
+            background-color: var(--vintage-light);
+            color: var(--vintage-text);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .vintage-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--vintage-paper);
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            border: 1px solid var(--vintage-secondary);
+            box-shadow: 0 0 15px rgba(139, 69, 19, 0.1);
+        }
+
+        .vintage-welcome {
+            background: rgba(255, 245, 224, 0.95);
+            border: 1px solid var(--vintage-secondary);
+            border-radius: 5px;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(139, 69, 19, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .welcome-text {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.5rem;
+            color: var(--vintage-accent);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .vintage-header {
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .vintage-title {
+            font-family: 'Cinzel Decorative', cursive;
+            color: var(--vintage-accent);
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .vintage-icon {
+            color: var(--vintage-primary);
+        }
+
+        .vintage-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .divider-line {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--vintage-primary), transparent);
+        }
+
+        .divider-icon {
+            margin: 0 15px;
+            color: var(--vintage-primary);
+            font-size: 1.2rem;
+        }
+
+        .vintage-subtitle {
+            font-style: italic;
+            color: var(--vintage-accent);
+            font-size: 1.2rem;
+        }
+
+        .vintage-table-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .vintage-table-card {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border: 1px solid var(--vintage-secondary);
+            box-shadow: 3px 3px 0px rgba(139, 69, 19, 0.2);
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .vintage-table-card:hover {
+            box-shadow: 5px 5px 0px rgba(139, 69, 19, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .vintage-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .vintage-table th,
+        .vintage-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px dashed var(--vintage-secondary);
+            vertical-align: top;
+        }
+
+        .vintage-table th {
+            font-family: 'Cinzel', serif;
+            color: var(--vintage-primary);
+            width: 200px;
+        }
+
+        .vintage-table td {
+            color: var(--vintage-dark);
+        }
+
+        .vintage-table tr:last-child th,
+        .vintage-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .vintage-table-image {
+            max-width: 150px;
+            max-height: 200px;
+            border: 1px solid var(--vintage-secondary);
+            box-shadow: 2px 2px 5px rgba(139, 69, 19, 0.1);
+        }
+
+        .vintage-no-image {
+            font-style: italic;
+            color: var(--vintage-secondary);
+        }
+
+        .vintage-table-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 20px;
+            border-top: 1px dashed var(--vintage-secondary);
+        }
+
+        .vintage-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 0;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            border: 1px solid;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .vintage-btn-outline {
+            background-color: transparent;
+            color: var(--vintage-primary);
+            border-color: var(--vintage-primary);
+        }
+
+        .vintage-btn-outline:hover {
+            background-color: var(--vintage-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .vintage-title {
+                font-size: 2rem;
+            }
+
+            .divider-line {
+                width: 50px;
+            }
+
+            .vintage-welcome {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px 15px;
+            }
+
+            .welcome-text {
+                font-size: 1.2rem;
+            }
+
+            .vintage-table th,
+            .vintage-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .vintage-table th {
+                padding-bottom: 5px;
+                border-bottom: none;
+            }
+
+            .vintage-table td {
+                padding-top: 5px;
+                padding-bottom: 15px;
+            }
+
+            .vintage-table tr:last-child td {
+                padding-bottom: 0;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableCard = document.querySelector('.vintage-table-card');
+
+            if (tableCard) {
+                tableCard.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '5px 5px 0px rgba(139, 69, 19, 0.3)';
+                });
+
+                tableCard.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '3px 3px 0px rgba(139, 69, 19, 0.2)';
+                });
+            }
+        });
+    </script>
 {% endblock %}
