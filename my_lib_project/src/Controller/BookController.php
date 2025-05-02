@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
@@ -43,13 +44,30 @@ class BookController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_book_show', methods: ['GET'])]
+//    #[Route('/{id}', name: 'app_book_show', methods: ['GET'])]
+//    #[ParamConverter('book', class: Book::class)]
+//    public function show(Book $book): Response
+//    {
+//        return $this->render('book/show.html.twig', [
+//            'book' => $book,
+//        ]);
+//    }
+
+    #[Route('/book/{id}', name: 'app_book_show')]
+    #[ParamConverter('book', class: Book::class)]
     public function show(Book $book): Response
     {
+        // Vérifie si l'objet book existe
+        if ($book === null) {
+            throw $this->createNotFoundException('Le livre demandé n\'existe pas.');
+        }
+
+        // Affiche le détail du livre
         return $this->render('book/show.html.twig', [
             'book' => $book,
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'app_book_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Book $book, EntityManagerInterface $entityManager): Response
@@ -79,4 +97,41 @@ class BookController extends AbstractController
 
         return $this->redirectToRoute('app_book_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    #[Route('/client/{id}', name: 'app_book_show2', methods: ['GET'])]
+    public function showClient(int $id, BookRepository $bookRepository): Response
+    {
+        $book = $bookRepository->find($id);
+
+        if (!$book) {
+            throw $this->createNotFoundException('Livre non trouvé.');
+        }
+
+        return $this->render('book/show2.html.twig', [
+            'book' => $book,
+        ]);
+    }
+
+
+//    #[Route('/bookliste', name: 'app_book_index2')]
+//    public function indexClient(BookRepository $bookRepository): Response
+//    {
+//        $books = $bookRepository->findAll();
+//        return $this->render('book/index2.html.twig', [
+//            'books' => $books,
+//        ]);
+//    }
+    #[Route('/bookliste', name: 'app_book_index2')]
+    public function indexClient(BookRepository $bookRepository): Response
+    {
+        // Récupère tous les livres depuis la base de données
+        $books = $bookRepository->findAll();
+
+        // Retourne la vue avec les livres
+        return $this->render('book/index2.html.twig', [
+            'books' => $books,
+        ]);
+    }
+
 }

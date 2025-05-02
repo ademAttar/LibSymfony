@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book Details{% endblock %}
+
+{% block body %}
+    <div class="container my-4">
+        <h1 class="text-center mb-4">Book Details</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ book.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ book.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Author</th>
+                        <td>{{ book.author }}</td>
+                    </tr>
+                    <tr>
+                        <th>Published Year</th>
+                        <td>{{ book.publishedYear }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ book.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Image</th>
+                        <td>
+                            {% if book.image %}
+                                <img src="{{ book.image }}" alt="{{ book.title }}" class="img-fluid" style="max-width: 150px;">
+                            {% else %}
+                                <span>No image available</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ path('app_book_index2') }}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

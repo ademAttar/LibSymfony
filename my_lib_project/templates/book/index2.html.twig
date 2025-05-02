@@ -1,0 +1,326 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book Index{% endblock %}
+
+{% block body %}
+    <div class="vintage-container py-4">
+        <div class="vintage-header text-center mb-5">
+            <h1 class="vintage-title">
+                <span class="vintage-icon"><i class="fas fa-book-sparkles mr-2"></i></span>
+                <span class="vintage-text">Antique Book Collection</span>
+            </h1>
+            <div class="vintage-divider">
+                <span class="divider-line"></span>
+                <span class="divider-icon"><i class="fas fa-feather-alt"></i></span>
+                <span class="divider-line"></span>
+            </div>
+            <p class="vintage-subtitle">Curated volumes from ages past</p>
+        </div>
+
+        {% if books|length > 0 %}
+            <div class="row">
+                {% for book in books %}
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="vintage-card">
+                            <div class="vintage-card-header">
+                                <span class="vintage-card-year">{{ book.publishedYear }}</span>
+                                <h3 class="vintage-card-title">{{ book.title }}</h3>
+                                <p class="vintage-card-author">by {{ book.author }}</p>
+                            </div>
+
+                            <div class="vintage-card-image-container">
+                                {% if book.image %}
+                                    <img src="{{ book.image }}" alt="{{ book.title }}" class="vintage-card-image">
+                                    <div class="vintage-image-overlay"></div>
+                                {% else %}
+                                    <div class="vintage-card-no-image">
+                                        <i class="fas fa-book-dead"></i>
+                                        <span>No Cover Available</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="vintage-card-body">
+                                <p class="vintage-card-description">{{ book.description|slice(0, 120) }}...</p>
+                            </div>
+
+                            <div class="vintage-card-footer">
+                                <a href="{{ path('app_book_show2', {'id': book.id}) }}" class="vintage-btn vintage-btn-outline">
+                                    <i class="fas fa-magnifying-glass mr-1"></i> Examine
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="vintage-empty-state">
+                <div class="vintage-empty-content">
+                    <i class="fas fa-book-skull"></i>
+                    <h3>The Shelves Are Bare</h3>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Vintage Color Palette */
+        :root {
+            --vintage-primary: #8B4513;  /* SaddleBrown */
+            --vintage-secondary: #D2B48C;  /* Tan */
+            --vintage-accent: #A0522D;  /* Sienna */
+            --vintage-light: #F5F5DC;  /* Beige */
+            --vintage-dark: #5D4037;  /* Dark Brown */
+            --vintage-text: #3E2723;  /* Dark Brown */
+            --vintage-paper: #FFF8E1;  /* Paper */
+        }
+
+        body {
+            background-color: var(--vintage-light);
+            color: var(--vintage-text);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .vintage-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--vintage-paper);
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            border: 1px solid var(--vintage-secondary);
+            box-shadow: 0 0 15px rgba(139, 69, 19, 0.1);
+        }
+
+        .vintage-header {
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .vintage-title {
+            font-family: 'Cinzel Decorative', cursive;
+            color: var(--vintage-accent);
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .vintage-icon {
+            color: var(--vintage-primary);
+        }
+
+        .vintage-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .divider-line {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--vintage-primary), transparent);
+        }
+
+        .divider-icon {
+            margin: 0 15px;
+            color: var(--vintage-primary);
+            font-size: 1.2rem;
+        }
+
+        .vintage-subtitle {
+            font-style: italic;
+            color: var(--vintage-accent);
+            font-size: 1.2rem;
+        }
+
+        .vintage-card {
+            background: white;
+            border: 1px solid var(--vintage-secondary);
+            border-radius: 0;
+            box-shadow: 3px 3px 0px rgba(139, 69, 19, 0.2);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+        }
+
+        .vintage-card:hover {
+            box-shadow: 5px 5px 0px rgba(139, 69, 19, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .vintage-card-header {
+            padding: 15px;
+            border-bottom: 1px dashed var(--vintage-secondary);
+            text-align: center;
+        }
+
+        .vintage-card-year {
+            display: inline-block;
+            background-color: var(--vintage-primary);
+            color: white;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .vintage-card-title {
+            font-family: 'Cinzel', serif;
+            color: var(--vintage-dark);
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .vintage-card-author {
+            font-style: italic;
+            color: var(--vintage-accent);
+            margin-bottom: 0;
+        }
+
+        .vintage-card-image-container {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            background-color: var(--vintage-light);
+        }
+
+        .vintage-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 20px;
+        }
+
+        .vintage-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(210, 180, 140, 0.1) 0%, rgba(139, 69, 19, 0.1) 100%);
+            pointer-events: none;
+        }
+
+        .vintage-card-no-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--vintage-secondary);
+            font-size: 3rem;
+        }
+
+        .vintage-card-no-image span {
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .vintage-card-body {
+            padding: 15px;
+            flex-grow: 1;
+            border-bottom: 1px dashed var(--vintage-secondary);
+        }
+
+        .vintage-card-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .vintage-card-footer {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .vintage-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 0;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            border: 1px solid;
+            text-decoration: none;
+        }
+
+        .vintage-btn-primary {
+            background-color: var(--vintage-primary);
+            color: white;
+            border-color: var(--vintage-dark);
+        }
+
+        .vintage-btn-primary:hover {
+            background-color: var(--vintage-accent);
+            color: white;
+        }
+
+        .vintage-btn-outline {
+            background-color: transparent;
+            color: var(--vintage-primary);
+            border-color: var(--vintage-primary);
+        }
+
+        .vintage-btn-outline:hover {
+            background-color: var(--vintage-primary);
+            color: white;
+        }
+
+        .vintage-empty-state {
+            padding: 50px 20px;
+            text-align: center;
+            background-color: rgba(210, 180, 140, 0.2);
+            border: 1px dashed var(--vintage-secondary);
+        }
+
+        .vintage-empty-content {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .vintage-empty-content i {
+            font-size: 3rem;
+            color: var(--vintage-secondary);
+            margin-bottom: 20px;
+        }
+
+        .vintage-empty-content h3 {
+            color: var(--vintage-accent);
+            font-family: 'Cinzel', serif;
+        }
+
+        @media (max-width: 768px) {
+            .vintage-title {
+                font-size: 2rem;
+            }
+
+            .divider-line {
+                width: 50px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Add any vintage-themed JS interactions if needed -->
+    <script>
+        // Example: Add page turn effect on card hover
+        document.querySelectorAll('.vintage-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'perspective(1000px) rotateY(5deg)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+    </script>
+{% endblock %}
