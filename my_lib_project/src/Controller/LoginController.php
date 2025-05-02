@@ -27,6 +27,16 @@ class LoginController extends AbstractController
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
             if ($user && $user->getPassword() === $password) {
+                // Save user data in session
+                $session = $request->getSession();
+                $session->set('user', [
+                    'id' => $user->getId(),
+                    'role' => $user->getRole(),
+                    'firstName' => $user->getFirstName(),
+                    'lastName' => $user->getLastName(),
+                    'email' => $user->getEmail(),
+                ]);
+
                 // Successful login
                 $this->addFlash('success', 'Login successful!');
 
@@ -45,6 +55,16 @@ class LoginController extends AbstractController
         return $this->render('user/index.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(Request $request): Response
+    {
+        $request->getSession()->remove('user');
+
+        $this->addFlash('success', 'Logged out successfully!');
+
+        return $this->redirectToRoute('home');
     }
 
 //    #[Route('/admin/dashboard/{id}', name: 'app_admin_dashboard')]
