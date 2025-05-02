@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}Log In{% endblock %}
 
 {% block body %}
-    <div class="register-container">
-        <div class="register-box">
-            <h1>Create an Account</h1>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>Log In</h1>
 
             {% for flash_message in app.flashes('success') %}
                 <div class="alert alert-success">
@@ -13,19 +13,14 @@
                 </div>
             {% endfor %}
 
+            {% for flash_message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
+
             {{ form_start(form) }}
-            <div class="form-group">
-                {{ form_label(form.firstName) }}
-                {{ form_widget(form.firstName) }}
-                {{ form_errors(form.firstName) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.lastName) }}
-                {{ form_widget(form.lastName) }}
-                {{ form_errors(form.lastName) }}
-            </div>
-
+            {{ form_errors(form) }}
             <div class="form-group">
                 {{ form_label(form.email) }}
                 {{ form_widget(form.email) }}
@@ -33,21 +28,17 @@
             </div>
 
             <div class="form-group">
-                {{ form_label(form.password.first) }}
-                {{ form_widget(form.password.first) }}
-                {{ form_errors(form.password.first) }}
+                {{ form_label(form.password) }}
+                {{ form_widget(form.password) }}
+                {{ form_errors(form.password) }}
             </div>
 
-            <div class="form-group">
-                {{ form_label(form.password.second) }}
-                {{ form_widget(form.password.second) }}
-                {{ form_errors(form.password.second) }}
-            </div>
-
-            <button type="submit">Sign Up</button>
+            <button type="submit">Log In</button>
             {{ form_end(form) }}
 
-
+            <p class="register-link">
+                Don't have an account? <a href="{{ path('app_register') }}">Sign up</a>
+            </p>
         </div>
     </div>
 
@@ -63,13 +54,13 @@
             margin: 0;
         }
 
-        .register-container {
+        .login-container {
             width: 100%;
             max-width: 400px;
             padding: 20px;
         }
 
-        .register-box {
+        .login-box {
             background: rgba(255, 245, 224, 0.95);
             border: 2px solid #8b6f47;
             border-radius: 10px;
@@ -94,6 +85,15 @@
             border-radius: 5px;
         }
 
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+        }
+
         .form-group {
             text-align: left;
             margin-bottom: 15px;
@@ -106,7 +106,6 @@
             display: block;
         }
 
-        input[type="text"],
         input[type="email"],
         input[type="password"] {
             width: 100%;
@@ -119,7 +118,6 @@
             transition: border-color 0.3s;
         }
 
-        input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="password"]:focus {
             border-color: #5c4033;
@@ -150,18 +148,18 @@
             background: #3c2f2f;
         }
 
-        .login-link {
+        .register-link {
             margin-top: 20px;
             font-size: 1em;
             color: #5c4033;
         }
 
-        .login-link a {
+        .register-link a {
             color: #8b6f47;
             text-decoration: none;
         }
 
-        .login-link a:hover {
+        .register-link a:hover {
             text-decoration: underline;
         }
     </style>

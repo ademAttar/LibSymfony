@@ -14,7 +14,7 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $role = null;
+    private ?string $role = 'User';
 
     #[ORM\Column(length: 100)]
     private ?string $firstName = null;
