@@ -17,6 +17,7 @@ class BookType extends AbstractType
             ->add('publishedYear')
             ->add('description')
             ->add('image')
+            ->add('price')
         ;
     }
 

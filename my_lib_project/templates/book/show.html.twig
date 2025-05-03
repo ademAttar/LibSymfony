@@ -52,6 +52,16 @@
                             <span class="vintage-details-label">ID:</span>
                             <span class="vintage-details-value">{{ book.id }}</span>
                         </div>
+                        <div class="vintage-details-row">
+                            <span class="vintage-details-label">Price:</span>
+                            <span class="vintage-details-value">
+                                {% if book.price is not null %}
+                                    ${{ book.price|number_format(2, '.', ',') }}
+                                {% else %}
+                                    <span class="text-muted">Not listed</span>
+                                {% endif %}
+                            </span>
+                        </div>
                         <div class="vintage-details-description">
                             <span class="vintage-details-label">Description:</span>
                             <p>{{ book.description }}</p>
@@ -307,6 +317,11 @@
 
         .vintage-details-value {
             flex-grow: 1;
+        }
+
+        .vintage-details-value .text-muted {
+            color: var(--vintage-secondary);
+            font-style: italic;
         }
 
         .vintage-details-description {

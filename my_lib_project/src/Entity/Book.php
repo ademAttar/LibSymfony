@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,13 +28,25 @@ class Book
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $image = null;
 
-    public function __construct(?string $title = null, ?string $author = null, ?string $description = null, ?int $publishedYear = null, ?string $image = null)
-    {
+    // NEW PRICE FIELD
+    #[ORM\Column(type: "float", nullable: true)]
+    private ?float $price = null;
+
+    public function __construct(
+        ?string $title = null,
+        ?string $author = null,
+        ?string $description = null,
+        ?int $publishedYear = null,
+        ?string $image = null,
+        // UPDATED CONSTRUCTOR TO INCLUDE PRICE
+        ?float $price = null
+    ) {
         $this->title = $title;
         $this->author = $author;
         $this->publishedYear = $publishedYear;
         $this->description = $description;
         $this->image = $image;
+        $this->price = $price;
     }
 
     public function getId(): ?int
@@ -95,6 +106,19 @@ class Book
     public function setImage(?string $image): self
     {
         $this->image = $image;
+        return $this;
+    }
+
+    // NEW GETTER FOR PRICE
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    // NEW SETTER FOR PRICE
+    public function setPrice(?float $price): self
+    {
+        $this->price = $price;
         return $this;
     }
 }

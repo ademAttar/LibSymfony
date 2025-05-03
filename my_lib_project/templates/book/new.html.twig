@@ -201,6 +201,16 @@
             resize: vertical;
         }
 
+        .vintage-form input[type="number"].form-control {
+            -moz-appearance: textfield; /* Remove Firefox spinner */
+        }
+
+        .vintage-form input[type="number"].form-control::-webkit-inner-spin-button,
+        .vintage-form input[type="number"].form-control::-webkit-outer-spin-button {
+            -webkit-appearance: none; /* Remove Chrome spinner */
+            margin: 0;
+        }
+
         /* Button styles */
         .vintage-btn {
             display: inline-flex;

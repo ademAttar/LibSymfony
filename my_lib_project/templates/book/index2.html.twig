@@ -71,13 +71,22 @@
 
                             <div class="vintage-card-body">
                                 <p class="vintage-card-description">{{ book.description|slice(0, 120) }}...</p>
+                                <p class="vintage-card-price">
+                                    {% if book.price is not null %}
+                                        ${{ book.price|number_format(2, '.', ',') }}
+                                    {% else %}
+                                        <span class="text-muted">Price not listed</span>
+                                    {% endif %}
+                                </p>
                             </div>
 
                             <div class="vintage-card-footer">
                                 <a href="{{ path('app_book_show2', {'id': book.id}) }}" class="vintage-btn vintage-btn-outline">
                                     <i class="fas fa-magnifying-glass mr-1"></i>Examine
                                 </a>
-                                <a href="{{ path('app_book_show2', {'id': book.id}) }}" class="vintage-btn vintage-btn-outline ml-2">
+                                <a href="{{ path('app_cart_add', {'id': book.id}) }}"
+                                   class="vintage-btn vintage-btn-outline ml-2 {{ book.price is null ? 'disabled' : '' }}"
+                                   {% if book.price is null %}aria-disabled="true"{% endif %}>
                                     <i class="fas fa-cart-plus mr-1"></i>Add to Cart
                                 </a>
                             </div>
@@ -296,6 +305,20 @@
         .vintage-card-description {
             font-size: 0.95rem;
             line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .vintage-card-price {
+            font-size: 1rem;
+            color: var(--vintage-primary);
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+        }
+
+        .vintage-card-price .text-muted {
+            color: var(--vintage-secondary);
+            font-style: italic;
+            font-weight: normal;
         }
 
         .vintage-card-footer {

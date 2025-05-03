@@ -51,6 +51,16 @@
                         <td>{{ book.description }}</td>
                     </tr>
                     <tr>
+                        <th>Price</th>
+                        <td>
+                            {% if book.price is not null %}
+                                ${{ book.price|number_format(2, '.', ',') }}
+                            {% else %}
+                                <span class="vintage-no-price">Not listed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
                         <th>Image</th>
                         <td>
                             {% if book.image %}
@@ -233,7 +243,8 @@
             box-shadow: 2px 2px 5px rgba(139, 69, 19, 0.1);
         }
 
-        .vintage-no-image {
+        .vintage-no-image,
+        .vintage-no-price {
             font-style: italic;
             color: var(--vintage-secondary);
         }

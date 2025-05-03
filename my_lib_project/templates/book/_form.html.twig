@@ -1,19 +1,94 @@
 {{ form_start(form, {'attr': {'class': 'vintage-form'}}) }}
 
 <div class="vintage-form-group">
-    {{ form_label(form, null, {
+    {{ form_label(form.title, null, {
         'label_attr': {'class': 'vintage-form-label'}
     }) }}
-
-    {{ form_widget(form, {
+    {{ form_widget(form.title, {
         'attr': {
             'class': 'vintage-form-control',
-            'placeholder': 'Enter ' ~ form.vars.label|lower
+            'placeholder': 'Enter title'
         }
     }) }}
-
     <div class="vintage-form-errors">
-        {{ form_errors(form) }}
+        {{ form_errors(form.title) }}
+    </div>
+</div>
+
+<div class="vintage-form-group">
+    {{ form_label(form.author, null, {
+        'label_attr': {'class': 'vintage-form-label'}
+    }) }}
+    {{ form_widget(form.author, {
+        'attr': {
+            'class': 'vintage-form-control',
+            'placeholder': 'Enter author'
+        }
+    }) }}
+    <div class="vintage-form-errors">
+        {{ form_errors(form.author) }}
+    </div>
+</div>
+
+<div class="vintage-form-group">
+    {{ form_label(form.publishedYear, null, {
+        'label_attr': {'class': 'vintage-form-label'}
+    }) }}
+    {{ form_widget(form.publishedYear, {
+        'attr': {
+            'class': 'vintage-form-control',
+            'placeholder': 'Enter published year'
+        }
+    }) }}
+    <div class="vintage-form-errors">
+        {{ form_errors(form.publishedYear) }}
+    </div>
+</div>
+
+<div class="vintage-form-group">
+    {{ form_label(form.description, null, {
+        'label_attr': {'class': 'vintage-form-label'}
+    }) }}
+    {{ form_widget(form.description, {
+        'attr': {
+            'class': 'vintage-form-control',
+            'placeholder': 'Enter description'
+        }
+    }) }}
+    <div class="vintage-form-errors">
+        {{ form_errors(form.description) }}
+    </div>
+</div>
+
+<div class="vintage-form-group">
+    {{ form_label(form.image, null, {
+        'label_attr': {'class': 'vintage-form-label'}
+    }) }}
+    {{ form_widget(form.image, {
+        'attr': {
+            'class': 'vintage-form-control',
+            'placeholder': 'Enter image URL or select file'
+        }
+    }) }}
+    <div class="vintage-form-errors">
+        {{ form_errors(form.image) }}
+    </div>
+</div>
+
+<div class="vintage-form-group">
+    {{ form_label(form.price, null, {
+        'label_attr': {'class': 'vintage-form-label'}
+    }) }}
+    {{ form_widget(form.price, {
+        'attr': {
+            'class': 'vintage-form-control',
+            'placeholder': 'Enter price',
+            'step': '0.01',
+            'min': '0'
+        }
+    }) }}
+    <div class="vintage-form-errors">
+        {{ form_errors(form.price) }}
     </div>
 </div>
 
@@ -123,6 +198,17 @@
     textarea.vintage-form-control {
         min-height: 150px;
         resize: vertical;
+    }
+
+    /* Number input specific styling */
+    input[type="number"].vintage-form-control {
+        -moz-appearance: textfield; /* Remove Firefox spinner */
+    }
+
+    input[type="number"].vintage-form-control::-webkit-inner-spin-button,
+    input[type="number"].vintage-form-control::-webkit-outer-spin-button {
+        -webkit-appearance: none; /* Remove Chrome spinner */
+        margin: 0;
     }
 </style>
 
