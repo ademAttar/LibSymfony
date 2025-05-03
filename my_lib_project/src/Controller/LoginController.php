@@ -23,11 +23,9 @@ class LoginController extends AbstractController
             $email = $data['email'];
             $password = $data['password'];
 
-            // Find user by email
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
             if ($user && $user->getPassword() === $password) {
-                // Save user data in session
                 $session = $request->getSession();
                 $session->set('user', [
                     'id' => $user->getId(),
@@ -37,17 +35,14 @@ class LoginController extends AbstractController
                     'email' => $user->getEmail(),
                 ]);
 
-                // Successful login
                 $this->addFlash('success', 'Login successful!');
 
-                // Redirect based on role
                 if ($user->getRole() === 'admin') {
                     return $this->redirectToRoute('app_book_index');
                 } else {
                     return $this->redirectToRoute('app_book_index2');
                 }
             } else {
-                // Invalid credentials
                 $this->addFlash('error', 'Invalid email or password.');
             }
         }
@@ -66,32 +61,4 @@ class LoginController extends AbstractController
 
         return $this->redirectToRoute('home');
     }
-
-//    #[Route('/admin/dashboard/{id}', name: 'app_admin_dashboard')]
-//    public function adminDashboard(int $id, EntityManagerInterface $entityManager): Response
-//    {
-//        $user = $entityManager->getRepository(User::class)->find($id);
-//
-//        if (!$user || $user->getRole() !== 'admin') {
-//            throw $this->createNotFoundException('Admin user not found');
-//        }
-//
-//        return $this->render('admin/dashboard.html.twig', [
-//            'user' => $user,
-//        ]);
-//    }
-//
-//    #[Route('/user/dashboard/{id}', name: 'app_user_dashboard')]
-//    public function userDashboard(int $id, EntityManagerInterface $entityManager): Response
-//    {
-//        $user = $entityManager->getRepository(User::class)->find($id);
-//
-//        if (!$user || $user->getRole() !== 'user') {
-//            throw $this->createNotFoundException('User not found');
-//        }
-//
-//        return $this->render('user/dashboard.html.twig', [
-//            'user' => $user,
-//        ]);
-//    }
 }

@@ -134,4 +134,12 @@ class BookController extends AbstractController
         ]);
     }
 
+    #[Route('/noAuth', name: 'app_book_index_no_auth', methods: ['GET'])]
+    public function indexWithoutAuth(BookRepository $bookRepository): Response
+    {
+        return $this->render('book/index3.html.twig', [
+            'books' => $bookRepository->findAll(),
+        ]);
+    }
+
 }

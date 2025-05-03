@@ -20,17 +20,13 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Set the role to "user" by default
             $user->setRole('user');
 
-            // Save the user to the database
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Add a success message
             $this->addFlash('success', 'Registration successful!');
 
-            // Redirect to the home page
             return $this->redirectToRoute('home');
         }
 
