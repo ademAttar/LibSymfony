@@ -90,6 +90,12 @@
                         <a href="{{ path('app_book_index2') }}" class="vintage-btn vintage-btn-outline">
                             <i class="fas fa-book mr-2"></i>Back to Catalog
                         </a>
+
+                        <form action="{{ path('app_cart_checkout') }}" method="post" style="display:inline;">
+                            <button type="submit" class="vintage-btn vintage-btn-outline ml-2">
+                                <i class="fas fa-check mr-2"></i>Place Order
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

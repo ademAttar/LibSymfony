@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use Psr\Log\LoggerInterface;
 use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
@@ -44,25 +43,14 @@ class BookController extends AbstractController
         ]);
     }
 
-//    #[Route('/{id}', name: 'app_book_show', methods: ['GET'])]
-//    #[ParamConverter('book', class: Book::class)]
-//    public function show(Book $book): Response
-//    {
-//        return $this->render('book/show.html.twig', [
-//            'book' => $book,
-//        ]);
-//    }
-
     #[Route('/book/{id}', name: 'app_book_show')]
     #[ParamConverter('book', class: Book::class)]
     public function show(Book $book): Response
     {
-        // Vérifie si l'objet book existe
         if ($book === null) {
             throw $this->createNotFoundException('Le livre demandé n\'existe pas.');
         }
 
-        // Affiche le détail du livre
         return $this->render('book/show.html.twig', [
             'book' => $book,
         ]);
@@ -112,23 +100,11 @@ class BookController extends AbstractController
             'book' => $book,
         ]);
     }
-
-
-//    #[Route('/bookliste', name: 'app_book_index2')]
-//    public function indexClient(BookRepository $bookRepository): Response
-//    {
-//        $books = $bookRepository->findAll();
-//        return $this->render('book/index2.html.twig', [
-//            'books' => $books,
-//        ]);
-//    }
     #[Route('/bookliste', name: 'app_book_index2')]
     public function indexClient(BookRepository $bookRepository): Response
     {
-        // Récupère tous les livres depuis la base de données
         $books = $bookRepository->findAll();
 
-        // Retourne la vue avec les livres
         return $this->render('book/index2.html.twig', [
             'books' => $books,
         ]);

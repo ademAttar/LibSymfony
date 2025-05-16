@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User Book Index{% endblock %}
+{% block title %}My Orders{% endblock %}
 
 {% block body %}
     <div class="vintage-container py-4">
         {% if app.session.get('user') %}
             <div class="vintage-welcome text-center mb-4">
-                <span class="welcome-text">Welcome, {{ app.session.get('user').firstName }}!</span>
+                <span class="welcome-text">Order History for {{ app.session.get('user').firstName }}</span>
                 <a href="{{ path('app_logout') }}" class="vintage-btn vintage-btn-outline ml-2">
                     <i class="fas fa-sign-out-alt mr-2"></i>Log Out
                 </a>
@@ -15,15 +15,15 @@
 
         <div class="vintage-header text-center mb-5">
             <h1 class="vintage-title">
-                <span class="vintage-icon"><i class="fas fa-book-sparkles mr-2"></i></span>
-                <span class="vintage-text">Antique Book Collection</span>
+                <span class="vintage-icon"><i class="fas fa-scroll mr-2"></i></span>
+                <span class="vintage-text">My Orders</span>
             </h1>
             <div class="vintage-divider">
                 <span class="divider-line"></span>
                 <span class="divider-icon"><i class="fas fa-feather-alt"></i></span>
                 <span class="divider-line"></span>
             </div>
-            <p class="vintage-subtitle">Curated volumes from ages past</p>
+            <p class="vintage-subtitle">Journey through your literary acquisitions</p>
         </div>
 
         {% for flash_message in app.flashes('success') %}
@@ -38,60 +38,70 @@
         {% endfor %}
 
         <div class="text-center mb-4">
-            <a href="{{ path('app_user_profile') }}" class="vintage-btn vintage-btn-outline">
+            <a href="{{ path('app_book_index2') }}" class="vintage-btn vintage-btn-outline">
+                <i class="fas fa-book-open mr-2"></i>Back to Catalogue
+            </a>
+            <a href="{{ path('app_user_profile') }}" class="vintage-btn vintage-btn-outline ml-2">
                 <i class="fas fa-user mr-2"></i>View Profile
-            </a>
-            <a href="{{ path('app_user_orders') }}" class="vintage-btn vintage-btn-outline ml-2">
-                <i class="fas fa-scroll mr-2"></i>My Orders
-            </a>
-            <a href="{{ path('home') }}" class="vintage-btn vintage-btn-outline ml-2">
-                <i class="fas fa-home mr-2"></i>Back to Home
             </a>
         </div>
 
-        {% if books|length > 0 %}
-            <div class="row">
-                {% for book in books %}
-                    <div class="col-md-6 col-lg-4 mb-5">
-                        <div class="vintage-card">
-                            <div class="vintage-card-header">
-                                <span class="vintage-card-year">{{ book.publishedYear }}</span>
-                                <h3 class="vintage-card-title">{{ book.title }}</h3>
-                                <p class="vintage-card-author">by {{ book.author }}</p>
+        {% if orders|length > 0 %}
+            <div class="vintage-orders-container">
+                {% for order in orders %}
+                    <div class="vintage-order-card mb-5">
+                        <div class="vintage-order-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="vintage-order-title">
+                                    <i class="fas fa-receipt mr-2"></i>Order #{{ order.id }}
+                                </h3>
+                                <span class="vintage-order-date">
+                                    {{ order.createdAt|date('F j, Y') }}
+                                </span>
                             </div>
+                            <div class="vintage-order-meta">
+                                <span class="vintage-order-status">
+                                    <i class="fas fa-check-circle"></i> Completed
+                                </span>
+                                <span class="vintage-order-total">
+                                    Total: ${{ order.total|number_format(2) }}
+                                </span>
+                            </div>
+                        </div>
 
-                            <div class="vintage-card-image-container">
-                                {% if book.image %}
-                                    <img src="{{ book.image }}" alt="{{ book.title }}" class="vintage-card-image">
-                                    <div class="vintage-image-overlay"></div>
-                                {% else %}
-                                    <div class="vintage-card-no-image">
-                                        <i class="fas fa-book-dead"></i>
-                                        <span>No Cover Available</span>
+                        <div class="vintage-order-items">
+                            <h4 class="vintage-order-subtitle">
+                                <i class="fas fa-books mr-2"></i>Items Purchased
+                            </h4>
+                            <div class="row">
+                                {% for item in order.orderItems %}
+                                    <div class="col-md-6">
+                                        <div class="vintage-order-item">
+                                            <div class="d-flex">
+                                                {% if item.book.image %}
+                                                    <div class="vintage-order-item-image">
+                                                        <img src="{{ item.book.image }}" alt="{{ item.book.title }}" class="img-fluid">
+                                                        <div class="vintage-image-overlay"></div>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="vintage-order-item-image vintage-card-no-image">
+                                                        <i class="fas fa-book-dead"></i>
+                                                        <span>No Cover Available</span>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="vintage-order-item-details">
+                                                    <h5>{{ item.book.title }}</h5>
+                                                    <p class="vintage-order-item-author">by {{ item.book.author }}</p>
+                                                    <div class="vintage-order-item-meta">
+                                                        <span>Qty: {{ item.quantity }}</span>
+                                                        <span>Price: ${{ item.price|number_format(2) }}</span>
+                                                        <span>Subtotal: ${{ (item.price * item.quantity)|number_format(2) }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                {% endif %}
-                            </div>
-
-                            <div class="vintage-card-body">
-                                <p class="vintage-card-description">{{ book.description|slice(0, 120) }}...</p>
-                                <p class="vintage-card-price">
-                                    {% if book.price is not null %}
-                                        ${{ book.price|number_format(2, '.', ',') }}
-                                    {% else %}
-                                        <span class="text-muted">Price not listed</span>
-                                    {% endif %}
-                                </p>
-                            </div>
-
-                            <div class="vintage-card-footer">
-                                <a href="{{ path('app_book_show2', {'id': book.id}) }}" class="vintage-btn vintage-btn-outline">
-                                    <i class="fas fa-magnifying-glass mr-1"></i>Examine
-                                </a>
-                                <a href="{{ path('app_cart_add', {'id': book.id}) }}"
-                                   class="vintage-btn vintage-btn-outline ml-2 {{ book.price is null ? 'disabled' : '' }}"
-                                   {% if book.price is null %}aria-disabled="true"{% endif %}>
-                                    <i class="fas fa-cart-plus mr-1"></i>Add to Cart
-                                </a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -100,11 +110,11 @@
         {% else %}
             <div class="vintage-empty-state">
                 <div class="vintage-empty-content">
-                    <i class="fas fa-book-skull"></i>
-                    <h3>The Shelves Are Bare</h3>
-                    <p>No tomes found in this collection</p>
-                    <a href="{{ path('app_home') }}" class="vintage-btn vintage-btn-outline mt-3">
-                        <i class="fas fa-home mr-2"></i>Back to Home
+                    <i class="fas fa-scroll"></i>
+                    <h3>No Orders Yet</h3>
+                    <p>Your collection awaits - explore our catalogue to begin your journey</p>
+                    <a href="{{ path('app_book_index2') }}" class="vintage-btn vintage-btn-outline mt-3">
+                        <i class="fas fa-book-open mr-2"></i>Browse Catalogue
                     </a>
                 </div>
             </div>
@@ -215,63 +225,110 @@
             font-size: 1.2rem;
         }
 
-        .vintage-card {
+        .vintage-orders-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .vintage-order-card {
             background: white;
             border: 1px solid var(--vintage-secondary);
             border-radius: 0;
             box-shadow: 3px 3px 0px rgba(139, 69, 19, 0.2);
-            transition: all 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            padding: 20px;
             background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+            transition: all 0.3s ease;
         }
 
-        .vintage-card:hover {
+        .vintage-order-card:hover {
             box-shadow: 5px 5px 0px rgba(139, 69, 19, 0.3);
             transform: translateY(-5px);
         }
 
-        .vintage-card-header {
+        .vintage-order-header {
             padding: 15px;
             border-bottom: 1px dashed var(--vintage-secondary);
             text-align: center;
         }
 
-        .vintage-card-year {
-            display: inline-block;
-            background-color: var(--vintage-primary);
-            color: white;
-            padding: 3px 10px;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-        }
-
-        .vintage-card-title {
+        .vintage-order-title {
             font-family: 'Cinzel', serif;
             color: var(--vintage-dark);
             font-size: 1.4rem;
             margin-bottom: 5px;
         }
 
-        .vintage-card-author {
+        .vintage-order-date {
             font-style: italic;
             color: var(--vintage-accent);
-            margin-bottom: 0;
+            font-size: 0.9rem;
         }
 
-        .vintage-card-image-container {
-            position: relative;
-            height: 250px;
-            overflow: hidden;
+        .vintage-order-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .vintage-order-status {
+            color: var(--vintage-primary);
+            font-weight: 600;
+        }
+
+        .vintage-order-total {
+            font-family: 'Cinzel', serif;
+            color: var(--vintage-dark);
+            font-weight: 600;
+        }
+
+        .vintage-order-subtitle {
+            font-family: 'Cinzel', serif;
+            color: var(--vintage-accent);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--vintage-secondary);
+            padding-bottom: 5px;
+        }
+
+        .vintage-order-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: rgba(210, 180, 140, 0.1);
+            border-left: 3px solid var(--vintage-primary);
+        }
+
+        .vintage-order-item-image {
+            width: 80px;
+            height: 120px;
+            margin-right: 15px;
             background-color: var(--vintage-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
 
-        .vintage-card-image {
-            width: 100%;
-            height: 100%;
+        .vintage-order-item-image img {
+            max-height: 100%;
+            max-width: 100%;
             object-fit: contain;
-            padding: 20px;
+            padding: 5px;
+        }
+
+        .vintage-order-item-image.vintage-card-no-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--vintage-secondary);
+            font-size: 1.5rem;
+        }
+
+        .vintage-order-item-image.vintage-card-no-image span {
+            font-size: 0.8rem;
+            margin-top: 5px;
         }
 
         .vintage-image-overlay {
@@ -284,52 +341,27 @@
             pointer-events: none;
         }
 
-        .vintage-card-no-image {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--vintage-secondary);
-            font-size: 3rem;
+        .vintage-order-item-details {
+            flex: 1;
         }
 
-        .vintage-card-no-image span {
-            font-size: 1rem;
-            margin-top: 10px;
+        .vintage-order-item-details h5 {
+            font-family: 'Cinzel', serif;
+            color: var(--vintage-dark);
+            margin-bottom: 5px;
         }
 
-        .vintage-card-body {
-            padding: 15px;
-            flex-grow: 1;
-            border-bottom: 1px dashed var(--vintage-secondary);
-        }
-
-        .vintage-card-description {
-            font-size: 0.95rem;
-            line-height: 1.5;
+        .vintage-order-item-author {
+            font-style: italic;
+            color: var(--vintage-accent);
+            font-size: 0.9rem;
             margin-bottom: 10px;
         }
 
-        .vintage-card-price {
-            font-size: 1rem;
-            color: var(--vintage-primary);
-            font-weight: 600;
-            font-family: 'Cinzel', serif;
-        }
-
-        .vintage-card-price .text-muted {
-            color: var(--vintage-secondary);
-            font-style: italic;
-            font-weight: normal;
-        }
-
-        .vintage-card-footer {
-            padding: 15px;
+        .vintage-order-item-meta {
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            font-size: 0.9rem;
         }
 
         .vintage-btn {
@@ -436,9 +468,18 @@
                 font-size: 1.2rem;
             }
 
-            .vintage-card-footer {
+            .vintage-order-meta {
                 flex-direction: column;
-                gap: 8px;
+                gap: 5px;
+            }
+
+            .vintage-order-item {
+                padding: 10px;
+            }
+
+            .vintage-order-item-meta {
+                flex-direction: column;
+                gap: 3px;
             }
         }
     </style>
@@ -447,7 +488,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.querySelectorAll('.vintage-card').forEach(card => {
+        document.querySelectorAll('.vintage-order-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
                 this.style.transform = 'perspective(1000px) rotateY(5deg)';
             });

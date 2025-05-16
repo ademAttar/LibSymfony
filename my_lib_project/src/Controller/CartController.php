@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\Order;
+use App\Entity\OrderItem;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -131,4 +134,81 @@ class CartController extends AbstractController
         $this->addFlash('success', sprintf('Updated quantity for "%s".', $title));
         return $this->redirectToRoute('app_cart');
     }
+
+    #[Route('/cart/checkout', name: 'app_cart_checkout')]
+    public function checkout(Request $request, EntityManagerInterface $em): Response
+    {
+        $session = $request->getSession();
+        $panier = $session->get('panier', []);
+
+        // Get user from session instead of security context
+        $userSession = $session->get('user');
+        if (!$userSession) {
+            $this->addFlash('error', 'You need to be logged in to checkout.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        if (empty($panier)) {
+            $this->addFlash('error', 'Your cart is empty.');
+            return $this->redirectToRoute('app_cart');
+        }
+
+        // Fetch the full user entity from database
+        $user = $em->getRepository(User::class)->find($userSession['id']);
+        if (!$user) {
+            $this->addFlash('error', 'User not found.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        $order = new Order();
+        $order->setUser($user);
+        $total = 0;
+
+        foreach ($panier as $id => $quantity) {
+            $book = $em->getRepository(Book::class)->find($id);
+            if (!$book || $book->getPrice() === null) {
+                unset($panier[$id]);
+                continue;
+            }
+
+            $orderItem = new OrderItem();
+            $orderItem->setBook($book);
+            $orderItem->setQuantity($quantity);
+            $orderItem->setPrice($book->getPrice());
+            $orderItem->setOrder($order);
+
+            $order->addOrderItem($orderItem);
+            $em->persist($orderItem);
+
+            $total += $book->getPrice() * $quantity;
+        }
+
+        $order->setTotal($total);
+        $em->persist($order);
+        $em->flush();
+
+        $session->remove('panier');
+        $this->addFlash('success', 'Your order has been placed successfully!');
+
+        return $this->redirectToRoute('app_cart');
+    }
+
+    #[Route('/my-orders', name: 'app_user_orders')]
+    public function userOrders(Request $request, EntityManagerInterface $em): Response
+    {
+        $session = $request->getSession();
+        $userSession = $session->get('user');
+
+        if (!$userSession) {
+            $this->addFlash('error', 'Please login to view your orders.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        $orders = $em->getRepository(Order::class)->findByUser($userSession['id']);
+
+        return $this->render('cart/user_orders.html.twig', [
+            'orders' => $orders,
+        ]);
+    }
+
 }
